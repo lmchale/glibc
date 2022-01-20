@@ -24,10 +24,9 @@ int
 fegetexcept (void)
 {
   int result = 0, pflags, r;
-  INTERNAL_SYSCALL_DECL (err);
 
-  r = INTERNAL_SYSCALL (prctl, err, 2, PR_GET_FPEXC, &pflags);
-  if (INTERNAL_SYSCALL_ERROR_P (r, err))
+  r = INTERNAL_SYSCALL_CALL (prctl, PR_GET_FPEXC, &pflags);
+  if (INTERNAL_SYSCALL_ERROR_P (r))
     return -1;
 
   result = __fexcepts_from_prctl (pflags);

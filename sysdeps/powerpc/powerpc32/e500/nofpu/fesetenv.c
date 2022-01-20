@@ -24,15 +24,14 @@ int
 __fesetenv (const fenv_t *envp)
 {
   fenv_union_t u;
-  INTERNAL_SYSCALL_DECL (err);
   int r;
 
   u.fenv = *envp;
 
   fesetenv_register (u.l[1]);
-  r = INTERNAL_SYSCALL (prctl, err, 2, PR_SET_FPEXC,
+  r = INTERNAL_SYSCALL_CALL (prctl, PR_SET_FPEXC,
 			u.l[0] | PR_FP_EXC_SW_ENABLE);
-  if (INTERNAL_SYSCALL_ERROR_P (r, err))
+  if (INTERNAL_SYSCALL_ERROR_P (r))
     return -1;
 
   /* Success.  */

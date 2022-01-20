@@ -24,11 +24,10 @@ int
 __fegetenv (fenv_t *envp)
 {
   fenv_union_t u;
-  INTERNAL_SYSCALL_DECL (err);
   int r;
 
-  r = INTERNAL_SYSCALL (prctl, err, 2, PR_GET_FPEXC, &u.l[0]);
-  if (INTERNAL_SYSCALL_ERROR_P (r, err))
+  r = INTERNAL_SYSCALL_CALL (prctl, PR_GET_FPEXC, &u.l[0]);
+  if (INTERNAL_SYSCALL_ERROR_P (r))
     return -1;
 
   u.l[1] = fegetenv_register ();

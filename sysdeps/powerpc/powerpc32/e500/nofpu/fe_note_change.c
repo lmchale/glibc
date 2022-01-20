@@ -26,13 +26,12 @@ void
 __fe_note_change (void)
 {
   int pflags, r;
-  INTERNAL_SYSCALL_DECL (err);
 
-  r = INTERNAL_SYSCALL (prctl, err, 2, PR_GET_FPEXC, &pflags);
-  if (INTERNAL_SYSCALL_ERROR_P (r, err))
+  r = INTERNAL_SYSCALL_CALL (prctl, PR_GET_FPEXC, &pflags);
+  if (INTERNAL_SYSCALL_ERROR_P (r))
     return;
   if ((pflags & PR_FP_EXC_SW_ENABLE) == 0)
-    INTERNAL_SYSCALL (prctl, err, 2, PR_SET_FPEXC,
+    INTERNAL_SYSCALL_CALL (prctl,  PR_SET_FPEXC,
 		      pflags | PR_FP_EXC_SW_ENABLE);
 }
 

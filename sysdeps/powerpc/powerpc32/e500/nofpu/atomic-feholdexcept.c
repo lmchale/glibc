@@ -26,12 +26,11 @@ void
 __atomic_feholdexcept (fenv_t *envp)
 {
   fenv_union_t u;
-  INTERNAL_SYSCALL_DECL (err);
   int r;
 
   /* Get the current state.  */
-  r = INTERNAL_SYSCALL (prctl, err, 2, PR_GET_FPEXC, &u.l[0]);
-  if (INTERNAL_SYSCALL_ERROR_P (r, err))
+  r = INTERNAL_SYSCALL_CALL (prctl, PR_GET_FPEXC, &u.l[0]);
+  if (INTERNAL_SYSCALL_ERROR_P (r))
     abort ();
 
   u.l[1] = fegetenv_register ();
@@ -48,8 +47,8 @@ __atomic_feholdexcept (fenv_t *envp)
 
   /* Put the new state in effect.  */
   fesetenv_register (u.l[1]);
-  r = INTERNAL_SYSCALL (prctl, err, 2, PR_SET_FPEXC,
+  r = INTERNAL_SYSCALL_CALL (prctl, PR_SET_FPEXC,
 			u.l[0] | PR_FP_EXC_SW_ENABLE);
-  if (INTERNAL_SYSCALL_ERROR_P (r, err))
+  if (INTERNAL_SYSCALL_ERROR_P (r))
     abort ();
 }
