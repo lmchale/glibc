@@ -373,6 +373,16 @@ class Context(object):
                         variant='rv32imafdc-ilp32d',
                         gcc_cfg=['--with-arch=rv32imafdc', '--with-abi=ilp32d',
                                  '--disable-multilib'])
+                        gcc_cfg=['--disable-multilib', '--enable-secureplt'])
+        self.add_config(arch='powerpc',
+                        os_name='linux-gnuspe',
+                        gcc_cfg=['--disable-multilib', '--enable-secureplt',
+                                 '--enable-e500-double', '--enable-obsolete'])
+        self.add_config(arch='powerpc',
+                        os_name='linux-gnuspe',
+                        variant='e500v1',
+                        gcc_cfg=['--disable-multilib', '--enable-secureplt',
+                                 '--enable-obsolete'])
         self.add_config(arch='riscv64',
                         os_name='linux-gnu',
                         variant='rv64imac-lp64',

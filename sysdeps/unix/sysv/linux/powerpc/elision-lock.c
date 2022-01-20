@@ -39,6 +39,7 @@
 int
 __lll_lock_elision (int *lock, short *adapt_count, EXTRAARG int pshared)
 {
+#ifndef __SPE__
   /* adapt_count is accessed concurrently but is just a hint.  Thus,
      use atomic accesses but relaxed MO is sufficient.  */
   if (atomic_load_relaxed (adapt_count) > 0)
@@ -76,6 +77,7 @@ __lll_lock_elision (int *lock, short *adapt_count, EXTRAARG int pshared)
 			  aconf.skip_lock_out_of_tbegin_retries);
 
 use_lock:
+#endif
   return LLL_LOCK ((*lock), pshared);
 }
 libc_hidden_def (__lll_lock_elision)
